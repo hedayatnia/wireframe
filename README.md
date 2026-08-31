@@ -7,7 +7,7 @@ A fast, local-first wireframe board built for the agent workflow. Sketch the UI,
 ## What's here
 
 - `app/index.html` — the entire app, one self-contained HTML file. No build step, no dependencies, works offline, autosaves locally.
-- `skill/SKILL.md` — the `wireframe-first` agent skill: teaches coding agents when to offer a wireframe-first step (and just as importantly, when not to).
+- `skills/wireframe-first/SKILL.md` — the `wireframe-first` agent skill: teaches coding agents when to offer a wireframe-first step (and just as importantly, when not to).
 - `index.html` + `assets/` — the landing page.
 
 ## Use the app
@@ -23,11 +23,19 @@ Export (top right) → pick Claude Code, Cursor, ChatGPT, or any agent:
 
 ## Install the skill
 
-Copy `skill/SKILL.md` into your agent's skills directory, e.g. `.claude/skills/wireframe-first/SKILL.md`, or with the skills CLI:
+The skill is at `skills/wireframe-first/SKILL.md`, in the standard Agent Skills format — it works unchanged in Claude Code, Codex, Cursor, and Aside.
+
+Easiest install (the CLI auto-detects your agents and installs to the right place):
 
 ```bash
 npx skills add hedayatnia/wireframe --skill wireframe-first
 ```
+
+Or copy the file manually:
+
+- **Claude Code:** `~/.claude/skills/wireframe-first/SKILL.md` (all projects) or `.claude/skills/wireframe-first/` in one repo
+- **Codex:** `~/.codex/skills/wireframe-first/SKILL.md`
+- **Aside:** add `skills/wireframe-first/SKILL.md` as an account skill from the repo, or drop it into your Aside user skills folder
 
 ## License
 
