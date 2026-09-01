@@ -59,6 +59,7 @@ h1 em { font-style: italic; color: var(--accent); }
 .live-wrap { border-radius: var(--radius); border: 1px solid var(--line); box-shadow: 0 24px 64px rgba(27, 28, 30, 0.14), 0 4px 16px rgba(27, 28, 30, 0.08); background: var(--dark); overflow: hidden; }
 .live-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: var(--dark-2); border-bottom: 1px solid var(--dark-line); }
 .live-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--dark-line); }
+.live-hint { margin-left: 8px; font-size: 11.5px; color: var(--ink-3); }
 .live-app { display: block; width: 100%; height: 560px; border: 0; background: var(--dark); }
 section { max-width: 1080px; margin: 0 auto; padding: 88px 32px 0; }
 .ba-sub { color: var(--ink-2); font-size: 15.5px; line-height: 1.6; }
@@ -187,6 +188,7 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .syncsplit .board-side .obj.hl { outline-color: var(--accent); }
 .syncsplit .specsheet pre, .syncsplit .ss-body div { padding: 1px 6px; margin: 0 -6px; border-radius: 5px; cursor: default; }
 .syncsplit .ss-body div.hl { background: rgba(2,133,255,.18); color: #f2f3f4; }
+.sync-hint { font-size: 11.5px; color: var(--ink-3); text-align: center; margin-top: 14px; }
 
 /* step 3: handoff into the agent */
 .handoff-pane { background: #141517; border: 1px solid var(--dark-line); border-radius: var(--radius); overflow: hidden; max-width: 620px; margin: 0 auto; }
@@ -212,7 +214,8 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .slidein-wrap.open .slidein-ed { flex-basis: 300px; opacity: 1; transform: none; }
 .slidein-ed .ce-bar { display: flex; gap: 6px; padding: 8px 12px; background: var(--dark-2); border-bottom: 1px solid var(--dark-line); }
 .slidein-ed .ce-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--dark-line); }
-.slidein-ed .ce-body { padding: 16px; display: flex; justify-content: center; }
+.slidein-ed .ce-body { padding: 16px; display: flex; justify-content: center; width: 300px; flex: none; }
+.slidein-ed .ce-cap { padding: 0 12px 12px; font-size: 11px; color: #62656b; text-align: center; }
 .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
 .typing-dots i { width: 6px; height: 6px; border-radius: 50%; background: #62656b; animation: tp 1s infinite; }
 .typing-dots i:nth-child(2) { animation-delay: .15s; } .typing-dots i:nth-child(3) { animation-delay: .3s; }
