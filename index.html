@@ -261,9 +261,9 @@ footer a:hover { color: var(--ink); }
   <div class="live-wrap">
     <div class="live-bar">
       <span class="live-dot"></span><span class="live-dot"></span><span class="live-dot"></span>
-      <span class="live-hint">live â drag things around, it's the real app</span>
+      <span class="live-hint">live — watch it build itself, or click in and take over</span>
     </div>
-    <iframe class="live-app" src="https://wireframe-local.vercel.app/?demo=1" title="Wireframe, running live" loading="lazy"></iframe>
+    <iframe class="live-app" src="https://wireframe-local.vercel.app/?demo=1&autoplay=1" title="Wireframe, running live" loading="lazy"></iframe>
   </div>
 </div>
 
@@ -465,6 +465,18 @@ document.querySelectorAll('.ht-tab').forEach(t => t.addEventListener('click', ()
 }));
 </script>
 
+<div id="spec-text-src" style="display:none">I have a wireframe image for you (I pasted it above/separately). This message is the exact spec behind the image.
+
+Positions and sizes below are precise (pixels, origin top-left of the whole board). Use them for layout, spacing, and proportions.
+
+Components:
+Text, block (280x60 at 0,0): Account settings
+Text input (280x38 at 0,56)
+Dropdown (280x38 at 0,108)
+Checkbox (280x26 at 0,160): Label
+Button (88x40 at 0,216): Save changes
+
+Implement this UI in the current codebase, faithful to the layout. If anything is ambiguous, ask me before you start.</div>
 <script>
 (function () {
   var names = { claudecode: 'Claude Code', cursor: 'Cursor', chatgpt: 'ChatGPT', other: 'Any agent' };
@@ -531,17 +543,20 @@ document.querySelectorAll('.ht-tab').forEach(t => t.addEventListener('click', ()
   sync();
 })();
 </script>
-<div id="spec-text-src" style="display:none">I have a wireframe image for you (I pasted it above/separately). This message is the exact spec behind the image.
 
-Positions and sizes below are precise (pixels, origin top-left of the whole board). Use them for layout, spacing, and proportions.
-
-Components:
-Text, block (280x60 at 0,0): Account settings
-Text input (280x38 at 0,56)
-Dropdown (280x38 at 0,108)
-Checkbox (280x26 at 0,160): Label
-Button (88x40 at 0,216): Save changes
-
-Implement this UI in the current codebase, faithful to the layout. If anything is ambiguous, ask me before you start.</div>
+<script>
+(function () {
+  var msgs = document.querySelectorAll('.chat .msg');
+  if (!msgs.length || !('IntersectionObserver' in window)) { msgs.forEach(function (m) { m.classList.add('in'); }); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      if (!en.isIntersecting) return;
+      io.disconnect();
+      msgs.forEach(function (m, i) { setTimeout(function () { m.classList.add('in'); }, 120 + i * 130); });
+    });
+  }, { threshold: 0.3 });
+  io.observe(document.querySelector('.chat'));
+})();
+</script>
 </body>
 </html>
