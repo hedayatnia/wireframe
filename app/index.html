@@ -3733,8 +3733,11 @@ renderAll();
 updateUndoBtns();
 applyCanvasTone(canvasTone);
 setGridMode(gridMode);
-// embedded on the landing page with ?demo=1 and no saved board: show a starter scene
-if (!state.objects.length && /[?&]demo=1/.test(location.search)) {
+// embedded on the landing page with ?demo=1: always show the starter scene, and never persist it over a visitor's own saved board
+if (/[?&]demo=1/.test(location.search)) {
+  const __origSetItem = localStorage.setItem.bind(localStorage);
+  localStorage.setItem = (k, v) => { if (k === 'wf-board') return; __origSetItem(k, v); };
+  state.objects = [];
   window.__demoSeeded = true;
   const put = (t, x, y) => state.objects.push(makeComponent(t, x, y));
   const fr = makeComponent('frame', 60, 40); fr.w = 900; fr.h = 520; fr.text = 'Support console'; state.objects.push(fr);
@@ -3766,7 +3769,7 @@ if (state.objects.length) zoomToFit();
 // ---------- demo autoplay: a cursor assembles the demo board; any real input interrupts ----------
 (function () {
     if (!/[?&]demo=1/.test(location.search) || !/[?&]autoplay=1/.test(location.search)) return;
-  if (!window.__demoSeeded) return; // only animate a freshly seeded demo board, never a visitor's own saved board
+  if (!window.__demoSeeded) return; // only animate in demo mode (demo mode never persists over a visitor's own board)
   if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (matchMedia('(pointer: coarse)').matches || innerWidth < 700) return; // mobile: keep the finished board, no cursor show
   const blueprint = JSON.parse(JSON.stringify(state.objects));
