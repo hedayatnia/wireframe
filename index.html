@@ -211,10 +211,8 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .slidein-wrap { display: flex; gap: 16px; max-width: 860px; margin: 0 auto; align-items: stretch; }
 .slidein-wrap .handoff-pane { flex: 1 1 55%; min-width: 0; max-width: none; }
 .slidein-ed { flex: 0 0 0; overflow: hidden; opacity: 0; transform: translateX(16px); transition: flex-basis .6s cubic-bezier(.3,.7,.3,1), opacity .45s, transform .5s; background: var(--dark); border-radius: 12px; border: 1px solid var(--dark-line); }
-.slidein-wrap.open .slidein-ed { flex-basis: 300px; opacity: 1; transform: none; }
-.slidein-ed .ce-bar { display: flex; gap: 6px; padding: 8px 12px; background: var(--dark-2); border-bottom: 1px solid var(--dark-line); }
-.slidein-ed .ce-bar i { width: 8px; height: 8px; border-radius: 50%; background: var(--dark-line); }
-.slidein-ed .ce-body { padding: 16px; display: flex; justify-content: center; width: 300px; flex: none; }
+.ce-frame { display: block; width: 420px; height: 100%; min-height: 280px; border: 0; background: var(--dark); }
+.slidein-wrap.open .slidein-ed { flex-basis: 420px; opacity: 1; transform: none; }
 .slidein-ed .ce-cap { padding: 0 12px 12px; font-size: 11px; color: #62656b; text-align: center; }
 .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
 .typing-dots i { width: 6px; height: 6px; border-radius: 50%; background: #62656b; animation: tp 1s infinite; }
@@ -231,6 +229,7 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .compat-item svg, .compat-item img { width: 19px; height: 19px; display: block; border-radius: 4px; }
 
 @media (max-width: 900px) {
+  .ce-frame { width: 100%; min-height: 300px; }
   section { padding: 72px 20px 0; }
   .proof, .syncsplit { grid-template-columns: 1fr; }
   .step { grid-template-columns: 1fr; gap: 10px; }
@@ -240,7 +239,7 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
   .compat-row { gap: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .slidein-ed { flex-basis: 300px; opacity: 1; transform: none; }
+  .slidein-ed { flex-basis: 420px; opacity: 1; transform: none; }
   #sl-typing { display: none; }
   #sl-reply { display: block !important; }
 }
@@ -427,30 +426,7 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
       <div class="agent-inputbar"><span>Message…</span><span>⏎</span></div>
     </div>
     <div class="slidein-ed">
-      <div class="ce-bar"><i></i><i></i><i></i></div>
-      <div class="ce-body"><div class="mini-board" style="width:224px;height:205px;transform:scale(.8);transform-origin:center"><div class="obj" data-id="oy51p9y8" style="left: 0px; top: 0px; width: 280px; height: 60px;">
-    <div class="wf" style="display:flex;flex-direction:column;justify-content:center;gap:8px;">
-      <div style="width:100%;height:6px;border-radius:3px;background:#2e3034;"></div><div style="width:100%;height:6px;border-radius:3px;background:#2e3034;"></div><div style="width:72%;height:6px;border-radius:3px;background:#2e3034;"></div>
-    </div></div>
-<div class="obj" data-id="oalnez92" style="left: 0px; top: 56px; width: 280px; height: 38px;">
-    <div class="wf" style="background:#232427;border:1.5px solid #3a3c40;border-radius:6px;box-shadow:none;display:flex;align-items:center;padding:0 12px;">
-      <span style="font-size:12px;color:#f2f3f4;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">phil@airfoil.studio</span>
-    </div></div>
-<div class="obj" data-id="o27jse02" style="left: 0px; top: 108px; width: 280px; height: 38px;">
-    <div class="wf" style="background:#232427;border:1.5px solid #3a3c40;border-radius:6px;box-shadow:none;display:flex;align-items:center;padding:0 12px;">
-      <span style="font-size:12px;color:#f2f3f4;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Admin</span>
-      <svg style="margin-left:auto" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9a9da3" stroke-width="2.5"><path d="m6 9 6 6 6-6"></path></svg>
-    </div></div>
-<div class="obj" data-id="ocjnr6z2" style="left: 0px; top: 160px; width: 280px; height: 26px;">
-    <div class="wf" style="display:flex;align-items:center;gap:9px;padding:0 2px;">
-      <div style="flex:none;width:18px;height:18px;border:1.5px solid #3a3c40;border-radius:4px;background:#232427;display:flex;align-items:center;justify-content:center;">
-        
-      </div>
-      <span style="font-size:13px;color:#f2f3f4;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Email me a copy of my data</span>
-    </div></div>
-<div class="obj" data-id="ov8q25nm" style="left: 0px; top: 216px; width: 88px; height: 40px;"><div class="wf" style="background:#0285ff;border-radius:6px;box-shadow:none;display:flex;align-items:center;justify-content:center;">
-      <span style="font-size:13px;color:#ffffff;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;;padding:0 12px;">Save changes</span>
-    </div></div></div></div>
+      <iframe class="ce-frame" src="https://wireframe-local.vercel.app/?demo=1" title="The Wireframe board" loading="lazy"></iframe>
     </div>
   </div>
 </section>
