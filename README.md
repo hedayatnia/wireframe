@@ -8,7 +8,7 @@ A fast, local-first wireframe board built for the agent workflow. Sketch the UI,
 
 - `app/index.html` — the entire app, one self-contained HTML file. No build step, no dependencies, autosaves locally, works offline (served with `sw.js`, or straight from disk).
 - `skills/wireframe-first/SKILL.md` — the `wireframe-first` agent skill: teaches coding agents when to offer a wireframe-first step (and just as importantly, when not to).
-- `index.html` — the landing page (fonts and illustrations are inlined; UI previews are hand-drawn SVG so they stay crisp on phones). `sw.js` — the app's service worker (offline caching).
+- `index.html` — the landing page (fonts inlined; the product previews on it are the app's own real components rendered in the page, so they stay crisp on phones). `og.png` — the social share image. `sw.js` — the app's service worker (offline caching).
 
 ## Use the app
 
