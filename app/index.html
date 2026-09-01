@@ -3740,6 +3740,17 @@ if (/[?&]demo=1/.test(location.search)) {
   state.objects = [];
   window.__demoSeeded = true;
   const put = (t, x, y) => state.objects.push(makeComponent(t, x, y));
+  if (/[?&]scene=settings/.test(location.search)) {
+    // settings-page scene (matches the skill-section conversation on the landing page)
+    const fr2 = makeComponent('frame', 40, 40); fr2.w = 400; fr2.h = 340; fr2.text = 'Settings'; state.objects.push(fr2);
+    const put2 = (t, x, y, w, text) => { const c = makeComponent(t, x, y); if (w) c.w = w; if (text) c.text = text; state.objects.push(c); };
+    put2('textblock', 80, 90, 300, 'Account settings');
+    put2('textinput', 80, 152, 300, 'phil@airfoil.studio');
+    put2('dropdown', 80, 204, 300, 'Admin');
+    put2('checkbox', 80, 256, 300, 'Email me a copy of my data');
+    put2('button', 332, 310, 0, 'Save changes');
+    commit(); renderAll();
+  } else {
   const fr = makeComponent('frame', 60, 40); fr.w = 900; fr.h = 520; fr.text = 'Support console'; state.objects.push(fr);
   put('statcard', 100, 90);
   const s2 = makeComponent('statcard', 340, 90); s2.props.label = 'PISTACHIO'; s2.props.value = '$9,812'; s2.props.delta = '+1.2%'; state.objects.push(s2);
@@ -3752,6 +3763,7 @@ if (/[?&]demo=1/.test(location.search)) {
   put('codeblock', 660, 420);
   put('promptbar', 100, 540);
   commit(); renderAll();
+  }
 }
 if (state.objects.length) zoomToFit();
 </script>
