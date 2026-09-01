@@ -582,5 +582,19 @@ document.querySelectorAll('.ht-tab').forEach(t => t.addEventListener('click', ()
   }
 })();
 </script>
+
+<script>
+// auto-refresh when the page has changed since this tab loaded (stale open tabs only)
+(function () {
+  var etag = null;
+  fetch(location.href, { method: 'HEAD', cache: 'no-cache' }).then(function (r) { etag = r.headers.get('etag'); }).catch(function () {});
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden || !etag) return;
+    fetch(location.href, { method: 'HEAD', cache: 'no-cache' }).then(function (r) {
+      if (r.headers.get('etag') && r.headers.get('etag') !== etag) location.reload();
+    }).catch(function () {});
+  });
+})();
+</script>
 </body>
 </html>
