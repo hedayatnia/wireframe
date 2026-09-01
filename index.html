@@ -139,7 +139,9 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .sec-sub { margin-top: 14px; color: var(--ink-2); font-size: 15.5px; line-height: 1.6; }
 
 /* proof: wall+redpen vs the two artifacts */
-.proof { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: start; }
+.proof { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: stretch; }
+.proof .old, .proof .new { display: flex; flex-direction: column; }
+.proof .doc { flex: 1; display: flex; flex-direction: column; justify-content: center; }
 .proof .count { font-family: 'Lyon Text', Georgia, serif; font-size: 16px; color: var(--ink-2); margin-bottom: 14px; }
 .proof .count b { font-weight: 600; }
 .proof .old .count b { color: #e3474c; }
@@ -277,7 +279,9 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
     <div class="old">
       <div class="count">The old way: <b>61 words</b> of this, every round</div>
       <div class="doc">
-        Build a settings page. Sidebar on the left with Profile, Notifications, Billing. Main area: heading, email field, role dropdown set to <s>Admin</s>, a checkbox, Save bottom right. <s>The nav goes on the left, not the top.</s> Make the header sticky. <s>Save button bottom-right, not under the form.</s> Tighten the rows. No, the other sidebar — narrower.
+        <span style="display:block;margin-bottom:14px">Build a settings page. Sidebar on the left with Profile, Notifications, Billing. Main area: heading, email field, role dropdown set to <s>Admin</s>, a checkbox, Save bottom right.</span>
+        <span style="display:block;margin-bottom:14px"><s>The nav goes on the left, not the top.</s> Make the header sticky. <s>Save button bottom-right, not under the form.</s></span>
+        <span style="display:block">Tighten the rows. No, the other sidebar — narrower. <s>Actually, undo that.</s> Email field needs a label.</span>
         <span class="marginnote m1">which sidebar?</span>
         <span class="marginnote m2">rows how tall?</span>
         <span class="marginnote m3">save where?</span>
