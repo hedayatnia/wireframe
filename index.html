@@ -426,7 +426,7 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
       <div class="agent-inputbar"><span>Message…</span><span>⏎</span></div>
     </div>
     <div class="slidein-ed">
-      <iframe class="ce-frame" src="https://wireframe-local.vercel.app/?demo=1" title="The Wireframe board" loading="lazy"></iframe>
+      <iframe class="ce-frame" data-src="https://wireframe-local.vercel.app/?demo=1&scene=settings" title="The Wireframe board"></iframe>
     </div>
   </div>
 </section>
@@ -558,6 +558,10 @@ document.querySelectorAll('.ht-tab').forEach(t => t.addEventListener('click', ()
   })();
 
   var wrap = document.getElementById('slidein-wrap');
+  if (wrap && matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var fr0 = wrap.querySelector('.ce-frame');
+    if (fr0 && !fr0.src) fr0.src = fr0.dataset.src;
+  }
   if (wrap && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var typing = document.getElementById('sl-typing');
     var reply = document.getElementById('sl-reply');
@@ -567,7 +571,11 @@ document.querySelectorAll('.ht-tab').forEach(t => t.addEventListener('click', ()
       typing.style.display = ''; reply.style.display = 'none';
       setTimeout(function () { typing.style.display = 'none'; reply.style.display = ''; }, 1800);
       setTimeout(function () { lk.classList.add('pulse'); }, 2600);
-      setTimeout(function () { wrap.classList.add('open'); lk.classList.remove('pulse'); }, 3600);
+      setTimeout(function () {
+        wrap.classList.add('open'); lk.classList.remove('pulse');
+        var fr = wrap.querySelector('.ce-frame');
+        if (fr && !fr.src) setTimeout(function () { fr.src = fr.dataset.src; }, 650);
+      }, 3600);
       setTimeout(play, 11000);
     };
     play();
