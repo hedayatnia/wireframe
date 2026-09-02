@@ -699,7 +699,8 @@ function setGridMode(mode) {
 function zoomToFit() {
   if (!state.objects.length) { view = { x: 0, y: 0, z: 1 }; applyView(); return; }
   const b = contentBounds();
-  const z = clamp(Math.min((innerWidth - 160) / b.w, (innerHeight - 160) / b.h), 0.05, 2);
+  const m = Math.min(160, Math.round(Math.min(innerWidth, innerHeight) * 0.22)); // small embeds get a smaller fit margin
+  const z = clamp(Math.min((innerWidth - m) / b.w, (innerHeight - m) / b.h), 0.05, 2);
   view.z = z; view.x = innerWidth / 2 - (b.x + b.w / 2) * z; view.y = innerHeight / 2 - (b.y + b.h / 2) * z;
   applyView();
 }
