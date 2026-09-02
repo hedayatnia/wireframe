@@ -649,7 +649,7 @@ function addObj(o, selectIt = true) {
 }
 function deleteSelected() {
   if (!sel.size) return;
-  state.objects = state.objects.filter(o => !sel.has(o.id));
+  state.objects = state.objects.filter(o => !sel.has(o.id) || o.locked);
   sel.clear(); pushHistory(); renderAll();
 }
 function defaultStyle() { return { fill: null, stroke: '#3a3c40', sw: 1.5, shadow: 'none', rad: 0 }; }
