@@ -1053,9 +1053,9 @@ const esc = s => (s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 
 function boxStyle(o, { bg = null, border = true, rad = null } = {}) {
   const s = o.style;
-  const fill = bg !== null ? bg : (s.fill || WFBG);
+  const fill = bg !== null ? surf(bg) : surf(s.fill || WFBG);
   return `background:${fill};` +
-    (border ? `border:${s.sw}px solid ${s.stroke};` : '') +
+    (border ? `border:${s.sw}px solid ${surf(s.stroke)};` : '') +
     `border-radius:${rad !== null ? rad : (s.rad || 6)}px;` +
     `box-shadow:${SHADOWS[s.shadow] || 'none'};`;
 }
@@ -1063,6 +1063,11 @@ const center = 'display:flex;align-items:center;justify-content:center;';
 const lbl = (txt, size = 11, color = WFTEXT, weight = 400) => `font-size:${size}px;color:${color};font-weight:${weight};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;`;
 function line(wpct, hpx = 5, color = WFFAINT) { return `<div style="width:${wpct}%;height:${hpx}px;border-radius:${hpx / 2}px;background:${color};"></div>`; }
 const tsz = (o, base) => Math.round(base * [0.7, 0.85, 1, 1.2, 1.45][o.props.tsize ?? 2]);
+
+// theme-aware surface mapping: dark surface colors get light equivalents on light canvas
+const SURF_MAP = { '#1e2023': '#ffffff', '#1b1d20': '#ffffff', '#232427': '#ffffff', '#282a2e': '#f7f7f8', '#2e3034': '#e8e8e6', '#3a3c40': '#c9c9c7', '#39434f': '#d0d4da' };
+const surf = c => ((canvasTone === 'paper' || canvasTone === 'snow') && SURF_MAP[c]) ? SURF_MAP[c] : c;
+
 const tabsOf = o => (o.props.tabs || []).map(t => typeof t === 'string' ? { label: t } : t);
 // row layout constants shared by renderers and the editor — do not drift
 const ROW_LAYOUT = {
@@ -1088,8 +1093,9 @@ const RENDERERS = {
     const custom = o.style.fill;
     const bg = st === 'hover' ? (custom || '#0070dd') : st === 'pressed' ? (custom || '#005cbf') : st === 'disabled' ? '#2e3034' : (custom || WFPURPLE);
     const fg = st === 'disabled' ? WFDIM : (custom ? WFLIGHTTEXT : '#ffffff');
-    return `<div class="wf" style="${boxStyle(o, { bg, border: false, rad: o.style.rad || 6 })}${center}">
-      <span style="${lbl(esc(o.text || 'Button'), tsz(o, 13), fg, 500)};padding:0 12px;">${esc(o.text || 'Button')}</span>
+    const ic = o.props.icon ? `<span style="display:flex;color:${fg};flex:none;">${icon(o.props.icon, tsz(o, 13))}</span>` : '';
+    return `<div class="wf" style="${boxStyle(o, { bg, border: false, rad: o.style.rad || 6 })}${center}gap:6px;padding:0 12px;">
+      ${ic}<span style="${lbl(esc(o.text || 'Button'), tsz(o, 13), fg, 500)};">${esc(o.text || 'Button')}</span>
     </div>`;
   },
   link: o => `
@@ -1297,7 +1303,7 @@ const RENDERERS = {
     <div class="wf" style="${boxStyle(o, { rad: 26 })}display:flex;align-items:center;padding:0 8px 0 16px;gap:10px;">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${WFDIM}" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
       <span style="flex:1;${lbl(esc(o.text || ''), 12, o.text ? WFTEXT : WFDIM)}">${esc(o.text || '')}</span>
-      <span style="display:flex;align-items:center;gap:4px;background:#1e2023;border:1px solid #39434f;border-radius:99px;padding:3px 9px;${lbl(esc(o.props.model || ''), 10.5, WFDIM, 500)}">${esc(o.props.model || '')}<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg></span>
+      <span style="display:flex;align-items:center;gap:4px;background:#1e2023;border:1px solid ${surf('#39434f')};border-radius:99px;padding:3px 9px;${lbl(esc(o.props.model || ''), 10.5, WFDIM, 500)}">${esc(o.props.model || '')}<svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="m6 9 6 6 6-6"/></svg></span>
       <span style="width:30px;height:30px;border-radius:50%;background:#0285ff;display:flex;align-items:center;justify-content:center;flex:none;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg></span>
     </div>`,
   thinking: o => {
@@ -1334,7 +1340,7 @@ const RENDERERS = {
     <div class="wf" style="${boxStyle(o, { rad: 10 })}border-left:3px solid #2fbf71;display:flex;flex-direction:column;overflow:hidden;">
       <div style="padding:10px 13px 0;${lbl('APPROVAL NEEDED', 9, '#2fbf71', 600)};letter-spacing:.07em;">APPROVAL NEEDED</div>
       <div style="padding:6px 13px;${lbl(esc(o.text || ''), 12.5, WFTEXT, 500)};white-space:normal;">${esc(o.text || '')}</div>
-      <div style="margin:0 13px;padding:6px 9px;border:1px solid #39434f;border-radius:6px;${lbl(esc(o.props.note || 'Add a note…'), 11, o.props.note ? WFTEXT : WFDIM)}">${esc(o.props.note || 'Add a note…')}</div>
+      <div style="margin:0 13px;padding:6px 9px;border:1px solid ${surf('#39434f')};border-radius:6px;${lbl(esc(o.props.note || 'Add a note…'), 11, o.props.note ? WFTEXT : WFDIM)}">${esc(o.props.note || 'Add a note…')}</div>
       <div style="display:flex;gap:8px;padding:10px 13px;margin-top:auto;">
         <span style="flex:1;text-align:center;padding:6px 0;border:1px solid #4b5768;border-radius:6px;${lbl('Decline', 11, WFDIM, 500)}">Decline</span>
         <span style="flex:1;text-align:center;padding:6px 0;background:#2fbf71;border-radius:6px;${lbl('Approve', 11, '#10241a', 600)}">Approve</span>
@@ -1343,10 +1349,10 @@ const RENDERERS = {
   contextcards: o => {
     let html = `<div class="wf" style="display:flex;flex-direction:column;gap:8px;padding:8px 0;">`;
     (o.props.items || []).forEach(it => {
-      html += `<div style="height:76px;background:#282a2e;border:1px solid #39434f;border-radius:9px;padding:9px 14px;overflow:hidden;">
+      html += `<div style="height:76px;background:#282a2e;border:1px solid ${surf('#39434f')};border-radius:9px;padding:9px 14px;overflow:hidden;">
         <div style="${lbl(esc(it.label), 11.5, WFTEXT, 500)}">${esc(it.label)}</div>
         <div style="${lbl(esc(it.body || ''), 10.5, WFDIM)};white-space:normal;margin-top:2px;line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">${esc(it.body || '')}</div>
-        <div style="margin-top:4px;"><span style="border:1px solid #39434f;border-radius:99px;padding:1px 7px;${lbl(esc(it.src || ''), 9.5, WFDIM)}">${esc(it.src || '')}</span></div>
+        <div style="margin-top:4px;"><span style="border:1px solid ${surf('#39434f')};border-radius:99px;padding:1px 7px;${lbl(esc(it.src || ''), 9.5, WFDIM)}">${esc(it.src || '')}</span></div>
       </div>`;
     });
     return html + '</div>';
@@ -1356,7 +1362,7 @@ const RENDERERS = {
     let html = `<div class="wf" style="${boxStyle(o, { rad: 8 })}overflow:hidden;display:flex;flex-direction:column;">
       <div style="flex:none;height:30px;background:#1e2023;border-bottom:1.5px solid #39434f;display:flex;align-items:center;gap:5px;padding:0 12px;">
         <div style="width:7px;height:7px;border-radius:50%;background:#4b5768"></div><div style="width:7px;height:7px;border-radius:50%;background:#4b5768"></div>
-        <span style="margin-left:6px;background:#1b1d20;border:1px solid #39434f;border-bottom:0;border-radius:5px 5px 0 0;padding:3px 10px;${lbl(esc(o.props.file || ''), 10, WFTEXT, 500)};font-family:Menlo,monospace;">${esc(o.props.file || '')}</span>
+        <span style="margin-left:6px;background:#1b1d20;border:1px solid ${surf('#39434f')};border-bottom:0;border-radius:5px 5px 0 0;padding:3px 10px;${lbl(esc(o.props.file || ''), 10, WFTEXT, 500)};font-family:Menlo,monospace;">${esc(o.props.file || '')}</span>
       </div>
       <div style="padding:10px 0;">`;
     lines.forEach((ln, i) => {
@@ -2348,7 +2354,14 @@ function openTextEdit(id, cellKey) {
     : (o.type === 'tooltip' || (o.type === 'button' && !o.style.fill)) ? WFLIGHTTEXT
     : WFTEXT;
   if (o.type === 'button' && !o.style.fill) textedit.style.color = '#ffffff';
-  textedit.style.background = 'rgba(255,255,255,.01)';
+  { // opaque editor bg matching the component surface — prevents new/old text overlap
+    const wfEl = document.querySelector('.obj[data-id="' + id + '"] .wf');
+    let bg = wfEl ? getComputedStyle(wfEl).backgroundColor : '';
+    if (!bg || bg === 'rgba(0, 0, 0, 0)' || bg === 'transparent') bg = canvasTone === 'light' ? '#f5f5f4' : '#1b1c1e';
+    textedit.style.background = bg;
+    const radEl = wfEl ? getComputedStyle(wfEl).borderRadius : '';
+    if (radEl && radEl !== '0px') textedit.style.borderRadius = radEl;
+  }
   textedit.dataset.cell = cellKey || '';
   $('#tb-font-name').textContent = o.props.font || 'Inter';
   ctxbar.style.display = 'none'; // parameters bar yields to the text toolbar while editing
@@ -3286,7 +3299,7 @@ function iconPickerBuild(id, tabIdx) {
         noneBtn.dataset.tip = 'none'; noneBtn.setAttribute('aria-label', 'none');
         noneBtn.onclick = () => {
           const o = getObj(id);
-          if (o) { const tabs = tabsOf(o); if (tabs[tabIdx]) { delete tabs[tabIdx].icon; o.props.tabs = tabs; } pushHistory(); renderAll(); }
+          if (o) { if (o.type === 'button') { delete o.props.icon; } else { const tabs = tabsOf(o); if (tabs[tabIdx]) { delete tabs[tabIdx].icon; o.props.tabs = tabs; } } pushHistory(); renderAll(); }
           closePop();
         };
         grid.appendChild(noneBtn);
@@ -3297,7 +3310,7 @@ function iconPickerBuild(id, tabIdx) {
         b.onclick = () => {
           const o = getObj(id);
           if (o) {
-            if (tabIdx == null) { o.props.icon = name; }
+            if (tabIdx == null || o.type === 'button') { o.props.icon = name; }
             else { const tabs = tabsOf(o); if (tabs[tabIdx]) { tabs[tabIdx].icon = name; o.props.tabs = tabs; } }
             pushHistory(); renderAll();
           }
@@ -3453,6 +3466,9 @@ function updateCtxbar() {
       }));
     });
     ctxbar.appendChild(stb);
+    // icon picker for buttons
+    const ib = cbBtn(`${icon(single.props.icon || 'plus', 13)}${chev}`, 'Icon', b => { const { x, y, up } = rectOf(b); openIconPicker(single.id, x, y); });
+    ctxbar.appendChild(ib);
     ctxbar.appendChild(el('div', 'sep'));
   }
 
