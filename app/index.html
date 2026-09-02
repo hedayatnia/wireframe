@@ -1033,8 +1033,9 @@ function placeArmed(e) {
   }
   disarm();
   setTool('select');
-  // placed components enter text-edit immediately (Whimsical behavior) except non-text ones
-  if (o && !['frame', 'icon', 'image', 'map', 'overlay'].includes(o.type)) openTextEdit(o.id);
+  // placed components enter text-edit immediately — only ones that visibly render o.text
+  const AUTO_EDIT = ['button','link','textinput','checkbox','radio','dropdown','textarea','tag','tooltip','annotation','codeblock','promptbar','approval','switch'];
+  if (o && AUTO_EDIT.includes(o.type)) openTextEdit(o.id);
 }
 // ---------- wireframe style constants (dark canvas, current Whimsical) ----------
 // canvas-content palette: two tones (dark / light canvas), swapped by setWFTheme
@@ -2548,6 +2549,11 @@ textedit.addEventListener('keydown', e => {
 let lastDownId = null, lastDownX = 0, lastDownY = 0, lastClickUpId = null, lastClickUpTs = 0, lastEmptyUpTs = 0, lastEmptyUpX = 0, lastEmptyUpY = 0;
 function openObjectEdit(hit, p, e) {
   if (hit.type === 'icon') { openIconPicker(hit.id, e.clientX, e.clientY); return; }
+  if (hit.type === 'browser') {
+    // clicking the URL bar area edits props.name; clicking the body does nothing
+    if (p.y - hit.y < 30) { openTextEdit(hit.id, 'name'); }
+    return;
+  }
   if (['checkbox', 'radio', 'switch'].includes(hit.type)) { openTextEdit(hit.id); return; }
   if (hit.type === 'table') {
     const cols = hit.props.cols || 3, rows = hit.props.rows || 3;
