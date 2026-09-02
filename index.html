@@ -211,7 +211,8 @@ section { max-width: 1080px; margin: 0 auto; padding: 96px 32px 0; }
 .slidein-wrap { display: flex; gap: 16px; max-width: 860px; margin: 0 auto; align-items: stretch; }
 .slidein-wrap .handoff-pane { flex: 1 1 55%; min-width: 0; max-width: none; }
 .slidein-ed { flex: 0 0 0; overflow: hidden; opacity: 0; transform: translateX(16px); transition: flex-basis .6s cubic-bezier(.3,.7,.3,1), opacity .45s, transform .5s; background: var(--dark); border-radius: 12px; border: 1px solid var(--dark-line); }
-.ce-frame { display: block; width: 420px; height: 100%; min-height: 280px; border: 0; background: var(--dark); }
+.slidein-ed { display: flex; flex-direction: column; }
+.ce-frame { display: block; width: 420px; flex: 1 1 auto; min-height: 440px; border: 0; background: var(--dark); }
 .slidein-wrap.open .slidein-ed { flex-basis: 420px; opacity: 1; transform: none; }
 .slidein-ed .ce-cap { padding: 0 12px 12px; font-size: 11px; color: #62656b; text-align: center; }
 .typing-dots { display: inline-flex; gap: 4px; padding: 4px 2px; }
