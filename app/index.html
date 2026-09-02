@@ -1033,9 +1033,6 @@ function placeArmed(e) {
   }
   disarm();
   setTool('select');
-  // placed components enter text-edit immediately — only ones that visibly render o.text
-  const AUTO_EDIT = ['button','link','textinput','checkbox','radio','dropdown','textarea','tag','tooltip','annotation','codeblock','promptbar','approval','switch'];
-  if (o && AUTO_EDIT.includes(o.type)) openTextEdit(o.id);
 }
 // ---------- wireframe style constants (dark canvas, current Whimsical) ----------
 // canvas-content palette: two tones (dark / light canvas), swapped by setWFTheme
