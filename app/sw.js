@@ -1,26 +1,31 @@
-// Offline cache for the single-file app. Cache-first; refreshes in the background.
-const CACHE = 'wireframe-v1';
+// Offline cache for the single-file app. Network-first with cache fallback.
+const CACHE = 'wireframe-v3';
 self.addEventListener('install', e => {
-  e.waitUntil((async () => {
-    const c = await caches.open(CACHE);
-    for (const url of ['./', './index.html']) {
-      try { const res = await fetch(url); if (res.ok) await c.put(url, res); } catch (err) {}
-    }
-    await self.skipWaiting();
-  })());
+  self.skipWaiting();
 });
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)))).then(() => self.clients.claim()));
+  e.waitUntil((async () => {
+    // delete ALL old caches
+    const keys = await caches.keys();
+    await Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k)));
+    await self.clients.claim();
+  })());
 });
 self.addEventListener('fetch', e => {
   if (e.request.method !== 'GET') return;
+  // skip non-http requests
+  if (!e.request.url.startsWith('http')) return;
   e.respondWith((async () => {
-    const hit = await caches.match(e.request);
     try {
-      const fresh = await fetch(e.request);
-      if (fresh.ok) { const copy = fresh.clone(); caches.open(CACHE).then(c => c.put(e.request, copy)); }
+      // always go to network, bypassing HTTP cache
+      const fresh = await fetch(e.request, { cache: 'no-store' });
+      if (fresh.ok) {
+        const copy = fresh.clone();
+        caches.open(CACHE).then(c => c.put(e.request, copy));
+      }
       return fresh;
     } catch (err) {
+      const hit = await caches.match(e.request);
       if (hit) return hit;
       throw err;
     }
